@@ -3,9 +3,8 @@ package main
 import (
 	"crypto/hmac"
 	"crypto/sha256"
-	"encoding/base64"
+	"encoding/hex"
 	"encoding/json"
-
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"os"
@@ -31,9 +30,6 @@ func MailGunTokenMiddleware() gin.HandlerFunc {
 		s := []string{timestamp, token}
 		authSignature := strings.Join(s, "")
 
-		// fmt.Println(ComputeHmac256(authSignature, key))
-		// c.Next()
-
 		result := CompareHmac256(authSignature, signature, key)
 		fmt.Println(result)
 
@@ -49,7 +45,6 @@ func MailGunTokenMiddleware() gin.HandlerFunc {
 
 func CompareHmac256(message string, signature string, key string) int {
 	hash1 := ComputeHmac256(message, key)
-	fmt.Println("message: ", hash1)
 	return strings.Compare(hash1, signature)
 }
 
@@ -57,5 +52,5 @@ func ComputeHmac256(message string, secret string) string {
 	key := []byte(secret)
 	h := hmac.New(sha256.New, key)
 	h.Write([]byte(message))
-	return base64.StdEncoding.EncodeToString(h.Sum(nil))
+	return hex.EncodeToString(h.Sum(nil))
 }
