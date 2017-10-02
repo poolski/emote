@@ -22,14 +22,20 @@ func main() {
 
 	// Setup Gin router
 	r := gin.Default()
-
 	// Setup routes
 	r.GET("/health/", healthCheck)
-	r.GET("/statuses/", getStatuses)
-	r.POST("/statuses/", addStatus)
+	r.GET("/statuses/", DummyMiddleware, getStatuses)
+	r.POST("/statuses/", DummyMiddleware, addStatus)
 
 	// Run server
 	r.Run(":3000")
+}
+
+func DummyMiddleware(c *gin.Context) {
+	fmt.Println("Im a dummy!")
+
+	// Pass on to the next-in-chain
+	c.Next()
 }
 
 func healthCheck(c *gin.Context) {
