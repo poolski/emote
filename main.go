@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
@@ -22,10 +23,11 @@ func main() {
 
 	// Setup Gin router
 	r := gin.Default()
+	r.Use(MailGunTokenMiddleware())
 	// Setup routes
 	r.GET("/health/", healthCheck)
-	r.GET("/statuses/", DummyMiddleware, getStatuses)
-	r.POST("/statuses/", DummyMiddleware, addStatus)
+	r.GET("/statuses/", getStatuses)
+	r.POST("/statuses/", addStatus)
 
 	// Run server
 	r.Run(":3000")

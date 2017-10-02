@@ -10,8 +10,6 @@ type Status struct {
 	Mood      int       `json:"mood"`
 }
 
-type MailgunToken struct {
-	Timestamp time.Time
-	Token     string
-	Signature string
+type Config struct {
+	MailgunKey string `json:"mailgun_key"`
 }
